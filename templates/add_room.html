@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block center %}
+<form action="{{ url_for('add_room') }}" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="form-label">Номер кімнати</label>
+        <input type="number" name="number" class="form-control">
+    </div>
+    <div class="from-group">
+        <label class="form-label">Поверх</label>
+        <input type="number" name="floor" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="form-label">Тип кімнати</label>
+        <input type="text" name="type" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="form-label">Площа кімнати</label>
+        <input type="number" step="0.1" name="squire" class="form-control">
+    </div>
+    <div class="form-group">
+        <label class="form-label">Виберіть фото кімнати</label>
+        <input type="file" name="img" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Додати кімнату</button>
+</form>
+{% endblock center %}
