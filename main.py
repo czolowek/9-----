@@ -1,4 +1,5 @@
 from uuid import uuid4
+import sched
 
 from flask import Flask, render_template, redirect, request, url_for, flash
 
@@ -10,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "password"
 
 
-@app.route("/add_room/", methods=["GET", "POST"])
+@app.route("/add_tur/", methods=["GET", "POST"])
 def add_room():
     if request.method == "POST":
         with Session() as session:
@@ -53,14 +54,14 @@ def index():
         return render_template("index.html", rooms=rooms)
 
 
-@app.get("/room/<int:room_id>")
+@app.get("/tur/<int:room_id>")
 def get_room(room_id: int):
     with Session() as session:
         room = session.query(Room).where(Room.id == room_id).first()
         return render_template("room.html", room=room)
 
 
-@app.route("/edit_room/<int:room_id>", methods=["GET", "POST"])
+@app.route("/edit_tur/<int:room_id>", methods=["GET", "POST"])
 def edit_room(room_id: int):
     with Session() as session:
         room = session.query(Room).where(Room.id == room_id).first()
@@ -84,7 +85,7 @@ def edit_room(room_id: int):
         return render_template("edit_room.html", room=room)
 
 
-@app.get("/del_room/<int:room_id>")
+@app.get("/del_tur/<int:room_id>")
 def del_room(room_id: int):
     with Session() as session:
         room = session.query(Room).where(Room.id == room_id).first()
@@ -93,6 +94,16 @@ def del_room(room_id: int):
         return redirect(url_for("index"))
 
 
+@app.get("/reserve/<int:room_id>/")
+def reserve(room_id: int):
+    with Session() as session:
+        room = session.query(Room).where(Room.id == room_id).first()
+        room.reserved = True
+        session.commit()
+        flash("Кімната успішно зарезервована")
+        return redirect(url_for("get_room", room_id=room_id))
+
+
 if __name__ == "__main__":
     create_db()
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=5051)
